@@ -1,0 +1,65 @@
+name: "Get latest apiserver release version"
+
+scms:
+  apiServerGit:
+    kind: "git"
+    spec:
+        url: "git@github.com:kubernetes/apiserver.git"
+        branch: "master"
+
+sources:
+  latestApiServerTag: 
+    name: Get Latest apiserver tag
+    kind: gittag
+    scmid: apiServerGit
+    spec:
+      versionfilter:
+        kind: semver
+        pattern: <1
+    transformers:
+      - findsubmatch:
+          pattern: 'v\d*.(\d*.\d*)'
+          captureindex: 1
+      - addprefix: "1."
+  latestApiServerBranch: 
+    name: Get Latest apiserver release branch
+    kind: gittag
+    scmid: apiServerGit
+    spec:
+      versionfilter:
+        kind: semver
+        pattern: <1
+    transformers:
+      - findsubmatch:
+          pattern: 'v\d*.(\d*).\d*'
+          captureindex: 1
+      - addprefix: "release-1."
+
+# The following condition is optional since
+conditions:
+  latestApiServerTag:
+    name: Check that the latest kubernetes tag exist
+    kind: gittag
+    sourceid: latestApiServerTag
+    scmid: apiServerGit
+    transformers:
+      - addprefix: "kubernetes-"
+  latestApiServerBranch:
+    name: Check that the latest kubernetes branch exist
+    kind: gitbranch
+    sourceid: latestApiServerBranch
+    scmid: apiServerGit
+
+targets:
+  update-apiserver-version:
+    kind: yaml
+    sourceid: latestApiServerTag
+    spec:
+      file: "updatecli/values.yaml"
+      key: "$.apiServerVersion"
+  update-apiserver-release-branch:
+    kind: yaml
+    sourceid: latestApiServerBranch
+    spec:
+      file: "updatecli/values.yaml"
+      key: "$.apiServerReleaseBranch"
