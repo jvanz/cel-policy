@@ -20,10 +20,10 @@ jobs:
         env:
           UPDATECLI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           UPDATECLI_GITHUB_OWNER: ${{ github.repository_owner }}
-        run: "updatecli apply --config ./updatecli/update_api_server_files.yaml"
+        run: "updatecli apply --debug --config ./updatecli/update_api_server_files.yaml"
 
       - name: Updates  API server files
         env:
           UPDATECLI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           UPDATECLI_GITHUB_OWNER: ${{ github.repository_owner }}
-        run: "updatecli apply --config ./updatecli/update_third_party_files.yaml --values ./updatecli/values.yaml"
+        run: "updatecli apply --debug --config ./updatecli/update_third_party_files.yaml --values ./updatecli/values.yaml"
