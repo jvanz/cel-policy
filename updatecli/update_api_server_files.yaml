@@ -4,7 +4,7 @@ scms:
   apiServerGit:
     kind: "git"
     spec:
-        url: "git@github.com:kubernetes/apiserver.git"
+        url: "https://github.com/kubernetes/apiserver.git"
         branch: "master"
 
 sources:
