@@ -28,6 +28,7 @@ conditions:
 targets:
   apiServerVersion: 
     kind: shell
+    scmid: "default"
     disablesourceinput: true
     spec:
       command: bash updatecli/scripts/install-third-party.sh
