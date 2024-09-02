@@ -16,8 +16,6 @@ scms:
         token: "{{ requiredEnv .github.token }}"
         username: "{{ requiredEnv .github.user }}"
         branch: "main"
-        maintainercannotmodify: true
-        mergemethod: "squash"
 
 conditions:
   update-repo:
@@ -41,12 +39,12 @@ targets:
 
 actions:
   createUpdatePR:
-    kind: "github"
+    kind: "github/pullrequest"
+    title: "Update third party directory with {{ .apiServerReleaseTag }} release files"
     scmid: "default"
     spec:
       automerge: false
       mergemethod: squash
-      title: "Update third party directory with {{ .apiServerReleaseTag }} release files"
       description: |
         Automatic third_party directory update with the files from the  {{ .apiServerReleaseTag }} release.
 
