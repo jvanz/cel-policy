@@ -41,12 +41,12 @@ targets:
 
 actions:
   createUpdatePR:
-    title: "Update third party directory with {{ .apiServerReleaseTag }} release files"
-    kind: "github/pullrequest"
+    kind: "github"
     scmid: "default"
     spec:
       automerge: false
       mergemethod: squash
+      title: "Update third party directory with {{ .apiServerReleaseTag }} release files"
       description: |
         Automatic third_party directory update with the files from the  {{ .apiServerReleaseTag }} release.
 
