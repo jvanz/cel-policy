@@ -27,6 +27,7 @@ conditions:
 
 targets:
   apiServerVersion: 
+    name: "Get latest apiserver release version"
     kind: shell
     scmid: "default"
     disablesourceinput: true
