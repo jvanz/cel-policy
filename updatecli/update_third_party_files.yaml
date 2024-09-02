@@ -9,6 +9,7 @@ scms:
   default:
       kind: github
       spec:
+        hidecredit: true
         user: "{{ .github.author }}"
         email: "{{ .github.email }}"
         owner: "{{ requiredEnv .github.owner }}"
