@@ -1,0 +1,58 @@
+name: "Get latest apiserver release version"
+
+scms:
+  apiServerGit:
+    kind: "git"
+    spec:
+      url: "git@github.com:kubernetes/apiserver.git"
+      branch: "{{ .apiServerReleaseBranch }}"
+  default:
+      kind: github
+      spec:
+        user: "{{ .github.author }}"
+        email: "{{ .github.email }}"
+        owner: "{{ requiredEnv .github.owner }}"
+        repository: "cel-policy"
+        token: "{{ requiredEnv .github.token }}"
+        username: "{{ requiredEnv .github.user }}"
+        branch: "main"
+        maintainercannotmodify: true
+        mergemethod: "squash"
+
+conditions:
+  update-repo:
+    name: "Checkout apiserver repository"
+    kind: file
+    scmid: apiServerGit
+    spec:
+      file: go.mod
+
+targets:
+  apiServerVersion: 
+    kind: shell
+    disablesourceinput: true
+    spec:
+      command: bash updatecli/scripts/install-third-party.sh
+      environments:
+        - name: "REPOSITORY_DIR"
+          value: "/tmp/updatecli/gitgithub_com_kubernetes_apiserver_git"
+        - name: "DESTINATION_DIR"
+          value: "third_party/k8s.io/apiserver/"
+
+actions:
+  createUpdatePR:
+    title: "Update third party directory with {{ .apiServerReleaseTag }} release files"
+    kind: "github/pullrequest"
+    scmid: "default"
+    spec:
+      automerge: false
+      mergemethod: squash
+      description: |
+        Automatic third_party directory update with the files from the  {{ .apiServerReleaseTag }} release.
+
+        REMEMBER IF YOU WANT TO MERGE IN A SINGLE COMMIT CHANGES AND VERSION BUMP, YOU MUST SQUASH THE COMMIT BEFORE MERGING THIS PR!
+      draft: false
+      maintainercanmodify: true
+      labels:
+        - "kind/chore"
+        - "area/dependencies"

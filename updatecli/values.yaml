@@ -1,2 +1,8 @@
 apiServerVersion: 1.29.1
 apiServerReleaseBranch: release-1.29
+github:
+  owner: "UPDATECLI_GITHUB_OWNER"
+  token: "UPDATECLI_GITHUB_TOKEN"
+  author: "Kubewarden bot"
+  email: "cncf-kubewarden-maintainers@lists.cncf.io"
+  user: "UPDATECLI_GITHUB_OWNER"
