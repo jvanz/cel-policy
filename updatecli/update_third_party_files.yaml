@@ -35,7 +35,7 @@ targets:
       command: bash updatecli/scripts/install-third-party.sh
       environments:
         - name: "REPOSITORY_DIR"
-          value: "/tmp/updatecli/gitgithub_com_kubernetes_apiserver_git"
+          value: "/tmp/updatecli/github_com_kubernetes_apiserver_git"
         - name: "DESTINATION_DIR"
           value: "third_party/k8s.io/apiserver/"
 
