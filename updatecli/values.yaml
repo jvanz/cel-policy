@@ -1,5 +1,3 @@
-apiServerVersion: 1.29.1
-apiServerReleaseBranch: release-1.29
 github:
   owner: "UPDATECLI_GITHUB_OWNER"
   token: "UPDATECLI_GITHUB_TOKEN"
