@@ -2,12 +2,6 @@
 
 # File to be copied from the API Server repository
 
-FILES=("pkg/apis/cel/config.go" "pkg/cel/errors.go" "pkg/cel/limits.go" 
-	"pkg/cel/quantity.go" "pkg/cel/types.go" "pkg/cel/url.go" 
-	"pkg/cel/value.go" "pkg/cel/OWNERS" "pkg/cel/library/lists.go" 
-	"pkg/cel/library/regex.go" "pkg/cel/library/test.go" "pkg/cel/library/urls.go")
-
-
 # Check if the base directory exists
 if [ ! -d "$REPOSITORY_DIR" ]; then
     echo "Error: Base directory $base_directory does not exist."

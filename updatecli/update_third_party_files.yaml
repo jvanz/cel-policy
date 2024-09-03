@@ -6,6 +6,11 @@ scms:
     spec:
       url: "https://github.com/kubernetes/apiserver.git"
       branch: "{{ .apiServerReleaseBranch }}"
+  apiMachineryGit:
+    kind: "git"
+    spec:
+      url: "https://github.com/kubernetes/apimachinery.git"
+      branch: "{{ .apiServerReleaseBranch }}"
   default:
       kind: github
       spec:
@@ -43,6 +48,13 @@ conditions:
     disablesourceinput: true
     spec:
       file: go.mod
+  updateApiMachineryRepo:
+    name: "Checkout apiserver repository"
+    kind: file
+    scmid: apiMachineryGit
+    disablesourceinput: true
+    spec:
+      file: go.mod
 
 targets:
   readmeUpdate:
@@ -59,7 +71,7 @@ targets:
         The current version is based on kubernetes v{{ source "apiServerVersion" }} (apiserver/apimachinery v{{ source "apiServerVersionNoMajor" }}).
         
         All code in this folder is licensed under the Apache License 2.0, see [LICENSE](LICENSE).
-  apiServerVersion: 
+  apiServerUpdate: 
     name: "Get latest apiserver release version"
     kind: shell
     scmid: "default"
@@ -71,6 +83,8 @@ targets:
           value: "/tmp/updatecli/github_com_kubernetes_apiserver_git"
         - name: "DESTINATION_DIR"
           value: "third_party/k8s.io/apiserver/"
+        - name: "FILES"
+          value: "pkg/apis/cel/config.go pkg/cel/errors.go pkg/cel/limits.go pkg/cel/quantity.go pkg/cel/types.go pkg/cel/url.go pkg/cel/value.go pkg/cel/OWNERS pkg/cel/library/lists.go pkg/cel/library/regex.go pkg/cel/library/test.go pkg/cel/library/urls.go"
 
 actions:
   createUpdatePR:

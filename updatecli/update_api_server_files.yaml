@@ -6,6 +6,11 @@ scms:
     spec:
         url: "https://github.com/kubernetes/apiserver.git"
         branch: "master"
+  apiMachineryGit:
+    kind: "git"
+    spec:
+        url: "https://github.com/kubernetes/apimachinery.git"
+        branch: "master"
 
 sources:
   latestApiServerTag: 
@@ -38,17 +43,29 @@ sources:
 # The following condition is optional since
 conditions:
   latestApiServerTag:
-    name: Check that the latest kubernetes tag exist
+    name: Check that the latest kubernetes tag exist in API Server
     kind: gittag
     sourceid: latestApiServerTag
     scmid: apiServerGit
     transformers:
       - addprefix: "kubernetes-"
   latestApiServerBranch:
-    name: Check that the latest kubernetes branch exist
+    name: Check that the latest kubernetes branch exist in API Server
     kind: gitbranch
     sourceid: latestApiServerBranch
     scmid: apiServerGit
+  latestApiMachineryTag:
+    name: Check that the latest kubernetes tag exist in API Machinery
+    kind: gittag
+    sourceid: latestApiServerTag
+    scmid: apiMachineryGit
+    transformers:
+      - addprefix: "kubernetes-"
+  latestApiMachineryBranch:
+    name: Check that the latest kubernetes branch exist in API Machinery
+    kind: gitbranch
+    sourceid: latestApiServerBranch
+    scmid: apiMachineryGit
 
 targets:
   update-apiserver-version:
@@ -61,16 +78,3 @@ targets:
       content: |
         apiServerVersion: {{ source "latestApiServerTag" }}
         apiServerReleaseBranch:  {{ source "latestApiServerBranch" }}
-  # update-apiserver-version:
-  #   kind: yaml
-  #   sourceid: latestApiServerTag
-  #   spec:
-  #     forcecreate: true
-  #     file: "/tmp/updatecli/values.yaml"
-  #     key: "$.apiServerVersion"
-  # update-apiserver-release-branch:
-  #   kind: yaml
-  #   sourceid: latestApiServerBranch
-  #   spec:
-  #     file: "/tmp/updatecli/values.yaml"
-  #     key: "$.apiServerReleaseBranch"
