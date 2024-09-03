@@ -54,12 +54,13 @@ targets:
   update-apiserver-version:
     kind: file
     # sourceid: latestApiServerTag
+    disablesourceinput: true
     spec:
       forcecreate: true
       file: "/tmp/updatecli/values.yaml"
       content: |
-        apiServerVersion: {{ source latestApiServerTag }}
-        apiServerReleaseBranch:  {{ source latestApiServerBranch }}
+        apiServerVersion: {{ source "latestApiServerTag" }}
+        apiServerReleaseBranch:  {{ source "latestApiServerBranch" }}
   # update-apiserver-version:
   #   kind: yaml
   #   sourceid: latestApiServerTag
