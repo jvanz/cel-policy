@@ -110,6 +110,7 @@ actions:
     spec:
       automerge: false
       mergemethod: squash
+      hidecredit: true
       description: |
         Automatic third_party directory update with the files from the  {{ .apiServerReleaseBranch }} branch.
 
