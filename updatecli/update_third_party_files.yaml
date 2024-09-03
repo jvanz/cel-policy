@@ -45,18 +45,6 @@ conditions:
       file: go.mod
 
 targets:
-  apiServerVersion: 
-    name: "Get latest apiserver release version"
-    kind: shell
-    scmid: "default"
-    disablesourceinput: true
-    spec:
-      command: bash updatecli/scripts/install-third-party.sh
-      environments:
-        - name: "REPOSITORY_DIR"
-          value: "/tmp/updatecli/github_com_kubernetes_apiserver_git"
-        - name: "DESTINATION_DIR"
-          value: "third_party/k8s.io/apiserver/"
   readmeUpdate:
     kind: "file"
     disablesourceinput: true
@@ -71,6 +59,18 @@ targets:
         The current version is based on kubernetes v{{ source "apiServerVersion" }} (apiserver/apimachinery v{{ source "apiServerVersionNoMajor" }}).
         
         All code in this folder is licensed under the Apache License 2.0, see [LICENSE](LICENSE).
+  apiServerVersion: 
+    name: "Get latest apiserver release version"
+    kind: shell
+    scmid: "default"
+    disablesourceinput: true
+    spec:
+      command: bash updatecli/scripts/install-third-party.sh
+      environments:
+        - name: "REPOSITORY_DIR"
+          value: "/tmp/updatecli/github_com_kubernetes_apiserver_git"
+        - name: "DESTINATION_DIR"
+          value: "third_party/k8s.io/apiserver/"
 
 actions:
   createUpdatePR:
