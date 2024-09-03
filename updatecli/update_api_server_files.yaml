@@ -55,11 +55,11 @@ targets:
     kind: yaml
     sourceid: latestApiServerTag
     spec:
-      file: "updatecli/values.yaml"
+      file: "/tmp/updatecli/values.yaml"
       key: "$.apiServerVersion"
   update-apiserver-release-branch:
     kind: yaml
     sourceid: latestApiServerBranch
     spec:
-      file: "updatecli/values.yaml"
+      file: "/tmp/updatecli/values.yaml"
       key: "$.apiServerReleaseBranch"

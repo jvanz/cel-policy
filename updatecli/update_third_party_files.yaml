@@ -19,15 +19,15 @@ scms:
         branch: "main"
 
 sources:
-  api-server-version:
+  apiServerVersion:
     kind: yaml
     spec:
-      file: "updatecli/values.yaml"
+      file: "/tmp/updatecli/values.yaml"
       key: "$.apiServerVersion"
-  api-server-version-no-major:
+  apiServerVersionNoMajor:
     kind: yaml
     spec:
-      file: "updatecli/values.yaml"
+      file: "/tmp/updatecli/values.yaml"
       key: "$.apiServerVersion"
     transformers:
       - findsubmatch:
@@ -66,7 +66,7 @@ targets:
         - [kubernetes/apiserver](https://github.com/kubernetes/apiserver).
         - [kubernetes/apimachinery](https://github.com/kubernetes/apimachinery).
         
-        The current version is based on kubernetes v{{ source api-server-version }} (apiserver/apimachinery v{{ source api-server-version-no-major }}).
+        The current version is based on kubernetes v{{ source apiServerVersion }} (apiserver/apimachinery v{{ source apiServerVersionNoMajor }}).
         
         All code in this folder is licensed under the Apache License 2.0, see [LICENSE](LICENSE).
 
