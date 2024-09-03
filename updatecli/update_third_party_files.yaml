@@ -18,6 +18,23 @@ scms:
         username: "{{ requiredEnv .github.user }}"
         branch: "main"
 
+sources:
+  api-server-version:
+    kind: yaml
+    spec:
+      file: "updatecli/values.yaml"
+      key: "$.apiServerVersion"
+  api-server-version-no-major:
+    kind: yaml
+    spec:
+      file: "updatecli/values.yaml"
+      key: "$.apiServerVersion"
+    transformers:
+      - findsubmatch:
+          pattern: '\d*.(\d*.\d*)'
+          captureindex: 1
+      - addprefix: "0."
+
 conditions:
   update-repo:
     name: "Checkout apiserver repository"
@@ -39,17 +56,30 @@ targets:
           value: "/tmp/updatecli/github_com_kubernetes_apiserver_git"
         - name: "DESTINATION_DIR"
           value: "third_party/k8s.io/apiserver/"
+  readmeUpdate:
+    kind: "file"
+    spec:
+      file: "./third_party/README.md"
+      content: |
+        This folder contains third-party code from kubernetes:
+        
+        - [kubernetes/apiserver](https://github.com/kubernetes/apiserver).
+        - [kubernetes/apimachinery](https://github.com/kubernetes/apimachinery).
+        
+        The current version is based on kubernetes v{{ source api-server-version }} (apiserver/apimachinery v{{ source api-server-version-no-major }}).
+        
+        All code in this folder is licensed under the Apache License 2.0, see [LICENSE](LICENSE).
 
 actions:
   createUpdatePR:
     kind: "github/pullrequest"
-    title: "Update third party directory with {{ .apiServerReleaseTag }} release files"
+    title: "Update third party directory with file from {{ .apiServerReleaseBranch }} branch"
     scmid: "default"
     spec:
       automerge: false
       mergemethod: squash
       description: |
-        Automatic third_party directory update with the files from the  {{ .apiServerReleaseTag }} release.
+        Automatic third_party directory update with the files from the  {{ .apiServerReleaseBranch }} branch.
 
         REMEMBER IF YOU WANT TO MERGE IN A SINGLE COMMIT CHANGES AND VERSION BUMP, YOU MUST SQUASH THE COMMIT BEFORE MERGING THIS PR!
       draft: false
