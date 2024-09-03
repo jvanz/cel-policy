@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# File to be copied from the API Server repository
-
 # Check if the base directory exists
 if [ ! -d "$REPOSITORY_DIR" ]; then
     echo "Error: Base directory $base_directory does not exist."
@@ -16,7 +14,7 @@ fi
 
 
 # Loop through each file in the list
-for file in "${FILES[@]}"; do
+for file in $FILES; do
     # Find the file in the base directory
     file_path="$REPOSITORY_DIR/$file"
     
