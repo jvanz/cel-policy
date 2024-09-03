@@ -58,6 +58,7 @@ conditions:
 
 targets:
   readmeUpdate:
+    name: "Update third party directory README file"
     kind: "file"
     disablesourceinput: true
     scmid: "default"
