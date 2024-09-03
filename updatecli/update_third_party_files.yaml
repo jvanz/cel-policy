@@ -36,10 +36,11 @@ sources:
       - addprefix: "0."
 
 conditions:
-  update-repo:
+  updateRepo:
     name: "Checkout apiserver repository"
     kind: file
     scmid: apiServerGit
+    disablesourceinput: true
     spec:
       file: go.mod
 
