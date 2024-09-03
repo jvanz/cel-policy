@@ -55,6 +55,7 @@ targets:
     kind: yaml
     sourceid: latestApiServerTag
     spec:
+      forcecreate: true
       file: "/tmp/updatecli/values.yaml"
       key: "$.apiServerVersion"
   update-apiserver-release-branch:
