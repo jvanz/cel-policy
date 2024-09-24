@@ -11,6 +11,11 @@ scms:
     spec:
       url: "https://github.com/kubernetes/apimachinery.git"
       branch: "{{ .apiServerReleaseBranch }}"
+  celGoGit:
+    kind: "git"
+    spec:
+      url: "https://github.com/google/cel-go.git"
+      branch: "master"
   default:
       kind: github
       spec:
@@ -41,6 +46,27 @@ sources:
           pattern: '\d*.(\d*.\d*)'
           captureindex: 1
       - addprefix: "0."
+  goModApiServerVersion:
+    kind: yaml
+    spec:
+      file: "/tmp/updatecli/values.yaml"
+      key: "$.apiServerVersion"
+    transformers:
+      - addprefix: "v"
+  latestCelGoTag: 
+    name: Get Latest cel-go tag
+    kind: gittag
+    scmid: celGoGit
+    spec:
+      versionfilter:
+        kind: semver
+        pattern: <1
+  oldApiServerVersion:
+    kind: golang/gomod
+    name: Get current apiserver version in use
+    scmid: default
+    spec:
+      module: "k8s.io/apiserver"
 
 conditions:
   updateRepo:
@@ -107,6 +133,35 @@ targets:
         - name: "FILES"
           value: "pkg/api/resource/amount.go pkg/api/resource/quantity.go pkg/api/resource/math.go \
                   pkg/api/resource/scale_int.go pkg/api/resource/suffix.go"
+  updateCelGoVersion:
+    kind: golang/gomod
+    name: Update cel-go version in use
+    scmid: default
+    sourceid: latestCelGoTag
+    spec:
+      module: "github.com/google/cel-go"
+  updateApiServerVersion:
+    kind: golang/gomod
+    name: Update apiserver version in use
+    scmid: default
+    sourceid: goModApiServerVersion
+    spec:
+      module: "k8s.io/apiserver"
+  updateGoReplacements:
+    name: "Update go.mod replaces for k8s.io/apiserver and k8s.io/apimachinery packages"
+    kind: shell
+    scmid: "default"
+    disablesourceinput: true
+    spec:
+      command: 'go mod edit -dropreplace=k8s.io/apiserver{{source "oldApiServerVersion"}} -dropreplace=k8s.io/apimachinery{{source "oldApiServerVersion"}} -replace=k8s.io/apiserver@{{ source "goModApiServerVersion" }}=./third_party/k8s.io/apiserver/ -replace=k8s.io/apimachinery@{{ source "goModApiServerVersion" }}=./third_party/k8s.io/apimachinery/'
+      environments:
+        - name: HOME
+        - name: PATH
+      changedif:
+        kind: file/checksum
+        spec:
+          files:
+            - go.mod
   goModTidy:
     disablesourceinput: true
     kind: shell
